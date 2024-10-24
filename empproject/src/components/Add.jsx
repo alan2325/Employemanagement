@@ -2,17 +2,30 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Add=()=> {
-    const [title, setTitle]=useState('');
-    const [description, setDescription] = useState('');
+    const [name, setName]=useState('');
+    const [address, setAddress] = useState('');
+    const [position, setPosition]=useState('');
+    const [salary, setSalary]=useState('');
+    const [experiance, setExperiance]=useState('');
+    const [phone, setPhone]=useState('');
+    const [email, setEmail]=useState('');
+    const [empid, setEmpid]=useState('');
+ 
     
    
     const handleSubmit = (e) =>{
         e.preventDefault();
-        axios.post(`https://aiswarya2325.pythonanywhere.com/employemanagement/employees`,{title ,description })
+        axios.post(`https://aiswarya2325.pythonanywhere.com/employemanagement/employees`,{name , position ,salary ,experiance ,phone ,email ,empid})
             .then(response => {
                 console.log(response.data)
-                setTitle('');
-                setDescription('');
+                setName('');
+                setAddress('');
+                setPosition('');
+                setSalary('');
+                setExperiance(''); 
+                setPhone('');
+                setEmail('');
+                setEmpid('');
             })
             .catch(error => console.log(error));
     };
@@ -22,20 +35,72 @@ const Add=()=> {
             <form onSubmit={handleSubmit}>
                 <h2 className='text-info'><u>Add Task</u></h2>
                 <div>
-                    <label className='text-dark'>Title</label>
+                    <label className='text-dark'>name</label>
                     <input 
                         className='form-control'
                         type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
                 </div>
                 <div className='mt-2'>
-                    <label>Descriptipon</label>
+                    <label>address</label>
                     <textarea
                         className='form-control'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                </div>
+                <div className='mt-2'>
+                    <label>position</label>
+                    <textarea
+                        className='form-control'
+                        value={position}
+                        onChange={(e) => setPosition(e.target.value)}
+                    />
+                </div>
+                <div className='mt-2'>
+                    <label>salary</label>
+                    <input
+                        className='form-control'
+                        type="number"
+                        value={salary}
+                        onChange={(e) => setSalary(e.target.value)}
+                    />
+                </div>
+                <div className='mt-2'>
+                    <label>experiance</label>
+                    <input
+                        className='form-control'
+                        type="number"
+                        value={experiance}
+                        onChange={(e) => setExperiance(e.target.value)}
+                    />
+                </div>
+                <div className='mt-2'>
+                    <label>phone</label>
+                    <input
+                        className='form-control'
+                        type="number"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                    />
+                </div>
+                <div className='mt-2'>
+                    <label>email</label>
+                    <textarea
+                        className='form-control'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                </div>
+                <div className='mt-2'>
+                    <label>empid</label>
+                    <input
+                        className='form-control'
+                        type="number"
+                        value={empid}
+                        onChange={(e) => setEmpid(e.target.value)}
                     />
                 </div>
                 <button type="submit" className='btn btn-success mt-3'>Add Task</button>
