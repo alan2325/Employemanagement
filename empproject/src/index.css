@@ -28,6 +28,11 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  padding: 4%;
+}
+
+input {
+  background-color: white;
 }
 
 h1 {
@@ -42,9 +47,10 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  /* background-color: #1a1a1a; */
   cursor: pointer;
   transition: border-color 0.25s;
+  margin-left: 10px;
 }
 button:hover {
   border-color: #646cff;

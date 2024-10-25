@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Add=()=> {
+const Add=  ()  => {
     const [name, setName]=useState('');
     const [address, setAddress] = useState('');
     const [position, setPosition]=useState('');
@@ -11,13 +11,15 @@ const Add=()=> {
     const [email, setEmail]=useState('');
     const [empid, setEmpid]=useState('');
  
-    
+    const handleClick = () =>{
+        window.location.reload();
+    };
    
     const handleSubmit = (e) =>{
         e.preventDefault();
-        axios.post(`https://aiswarya2325.pythonanywhere.com/employemanagement/employees`,{name , position ,salary ,experiance ,phone ,email ,empid})
+        axios.post(`https://aiswarya2325.pythonanywhere.com/employemanagement/employees/`,{name ,address , position ,salary ,experiance ,phone ,email ,empid})
             .then(response => {
-                console.log(response.data)
+                console.log(response.data);
                 setName('');
                 setAddress('');
                 setPosition('');
@@ -27,7 +29,8 @@ const Add=()=> {
                 setEmail('');
                 setEmpid('');
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log(error))
+            handleClick()
     };
 
     return(
@@ -88,8 +91,9 @@ const Add=()=> {
                 </div>
                 <div className='mt-2'>
                     <label>email</label>
-                    <textarea
+                    <input
                         className='form-control'
+                        type='email'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />

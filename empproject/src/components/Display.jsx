@@ -57,13 +57,28 @@ const Display = () => {
     if (error) return <div>{error}</div>;
 
     return (
-        <div className='container mt-3'>
+        <div className='container mt-3 '>
             <h2>Task List</h2>
             <table className='table table-bordered table-hover'>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Empid</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Position</th>
+                        <th>Salary</th>
+                        <th>Experience</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
                 <tbody>
                     {tasks.map(task => (
                         <tr key={task.id}>
                             <td>{task.id}</td>
+                            <td>{task.empid}</td>
                             <td>{task.name}</td>
                             <td>{task.address}</td>
                             <td>{task.position}</td>
@@ -72,9 +87,7 @@ const Display = () => {
                             <td>{task.phone}</td>
                             <td>{task.email}</td>
                             <td>
-                                <button className='btn btn-warning' onClick={() => editTask(task)}>Edit</button>
-                            </td>
-                            <td>
+                                <button className='btn btn-outline-warning' onClick={() => editTask(task)}>Edit</button>
                                 <button className='btn btn-danger' onClick={() => deleteTask(task.id)}>Delete</button>
                             </td>
                         </tr>
@@ -111,6 +124,7 @@ const EditTaskForm = ({ currentTask, updateTask }) => {
     return (
         <form onSubmit={handleSubmit}>
             <h2>Edit Task</h2>
+            
             <div>
                 <label>Name</label>
                 <input
@@ -183,7 +197,7 @@ const EditTaskForm = ({ currentTask, updateTask }) => {
                     onChange={handleInputChange}
                 />
             </div>
-            <button type="submit">Update Task</button>
+            <button className="btn btn-outline-primary" type="submit">Update Task</button>
         </form>
     );
 };
