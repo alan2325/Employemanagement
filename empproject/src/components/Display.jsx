@@ -106,7 +106,7 @@ const Display = () => {
 
 const EditTaskForm = ({ currentTask, updateTask }) => {
     const [task, setTask] = useState(currentTask);
-
+    
     useEffect(() => {
         setTask(currentTask);
     }, [currentTask]);
