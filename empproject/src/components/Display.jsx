@@ -4,17 +4,20 @@ import PropTypes from 'prop-types';
 
 const Display = () => {
     const [tasks, setTasks] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredTasks, setFilteredTasks] = useState([]);
     const [editing, setEditing] = useState(false);
     const [currentTask, setCurrentTask] = useState({
-        id: null, name: '', address: '', position: '', salary: '', experiance: ''
+        id: null, name: '', address: '', position: '', salary: '', experience: '', phone: '', email: '', empid: ''
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get('https://aiswarya2325.pythonanywhere.com/employemanagement/employees')
+        axios.get('https://alan2325.pythonanywhere.com/employe/employees/')
             .then(response => {
                 setTasks(response.data);
+                setFilteredTasks(response.data);
                 setLoading(false);
             })
             .catch(error => {
@@ -24,17 +27,32 @@ const Display = () => {
             });
     }, []);
 
+    useEffect(() => {
+        const result = tasks.filter(emp => 
+            emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp.phone.toString().includes(searchTerm.toString()) ||
+            emp.empid.toString().includes(searchTerm.toString())
+        );
+        setFilteredTasks(result);
+    }, [searchTerm, tasks]);
+   
+
     const editTask = (task) => {
         setEditing(true);
         setCurrentTask(task);
     };
 
     const updateTask = (id, updatedTask) => {
-        setEditing(false);
-        axios.put(`https://aiswarya2325.pythonanywhere.com/employemanagement/employees/${id}/`, updatedTask)
+        axios.put(`https://alan2325.pythonanywhere.com/employe/employees/${id}/`, updatedTask)
             .then(response => {
-                setTasks(tasks.map(task => (task.id === id ? response.data : task)));
-                setCurrentTask({ id: null, name: '', address: '', position: '', salary: '', experiance: '' });
+                setTasks(prevTasks => 
+                    prevTasks.map(task => (task.id === id ? response.data : task))
+                );
+                setCurrentTask({ id: null, name: '', address: '', position: '', salary: '', experience: '', phone: '', email: '', empid: '' });
+                setEditing(false);
             })
             .catch(error => {
                 setError('Failed to update task');
@@ -43,9 +61,9 @@ const Display = () => {
     };
 
     const deleteTask = (id) => {
-        axios.delete(`https://aiswarya2325.pythonanywhere.com/employemanagement/employees/${id}/`)
+        axios.delete(`https://alan2325.pythonanywhere.com/employe/employees/${id}/`)
             .then(() => {
-                setTasks(tasks.filter(task => task.id !== id));
+                setTasks(prevTasks => prevTasks.filter(task => task.id !== id));
             })
             .catch(error => {
                 setError('Failed to delete task');
@@ -57,8 +75,9 @@ const Display = () => {
     if (error) return <div>{error}</div>;
 
     return (
-        <div className='container mt-3 '>
+        <div className='container mt-3'>
             <h2>Task List</h2>
+            <input type="text" placeholder="Search" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
             <table className='table table-bordered table-hover'>
                 <thead>
                     <tr>
@@ -75,7 +94,7 @@ const Display = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {tasks.map(task => (
+                    {filteredTasks.map(task => (
                         <tr key={task.id}>
                             <td>{task.id}</td>
                             <td>{task.empid}</td>
@@ -106,7 +125,7 @@ const Display = () => {
 
 const EditTaskForm = ({ currentTask, updateTask }) => {
     const [task, setTask] = useState(currentTask);
-    
+
     useEffect(() => {
         setTask(currentTask);
     }, [currentTask]);
@@ -124,79 +143,17 @@ const EditTaskForm = ({ currentTask, updateTask }) => {
     return (
         <form onSubmit={handleSubmit}>
             <h2>Edit Task</h2>
-            
-            <div>
-                <label>Name</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={task.name}
-                    onChange={handleInputChange}
-                />
-            </div>
-            <div>
-                <label>Address</label>
-                <input
-                    type="text"
-                    name="address"
-                    value={task.address}
-                    onChange={handleInputChange}
-                />
-            </div>
-            <div>
-                <label>Position</label>
-                <input
-                    type="text"
-                    name="position"
-                    value={task.position}
-                    onChange={handleInputChange}
-                />
-            </div>
-            <div>
-                <label>Salary</label>
-                <input
-                    type="number"
-                    name="salary"
-                    value={task.salary}
-                    onChange={handleInputChange}
-                />
-            </div>
-            <div>
-                <label>Experience</label>
-                <input
-                    type="number"
-                    name="experiance"
-                    value={task.experiance}
-                    onChange={handleInputChange}
-                />
-            </div>
-            <div>
-                <label>Phone</label>
-                <input
-                    type="tel"
-                    name="phone"
-                    value={task.phone}
-                    onChange={handleInputChange}
-                />
-            </div>
-            <div>
-                <label>Email</label>
-                <input
-                    type="email"
-                    name="email"
-                    value={task.email}
-                    onChange={handleInputChange}
-                />
-            </div>
-            <div>
-                <label>Employee ID</label>
-                <input
-                    type="number"
-                    name="empid"
-                    value={task.empid}
-                    onChange={handleInputChange}
-                />
-            </div>
+            {['name', 'address', 'position', 'salary', 'experience', 'phone', 'email', 'empid'].map(field => (
+                <div key={field}>
+                    <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                    <input
+                        type={field === 'salary' || field === 'experience' ? 'number' : field === 'email' ? 'email' : 'text'}
+                        name={field}
+                        value={task[field]}
+                        onChange={handleInputChange}
+                    />
+                </div>
+            ))}
             <button className="btn btn-outline-primary" type="submit">Update Task</button>
         </form>
     );
